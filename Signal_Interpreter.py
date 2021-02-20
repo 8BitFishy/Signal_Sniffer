@@ -1,38 +1,39 @@
 def findduration(datalist, start, end, value, duration):
-
+    #print(f"Starting duration search for {value} from {start} to {end}")
     #iterate through datalist from start point to end of list
     for i in range(start, end):
-        print(i)
+        #print(f"Searching from {i}")
         #if data value is equal to search value
         if datalist[i][1] == value:
-
+            #print(f"Value {datalist[i][1]} equal to {value}")
             #start of block = i
             val_start = i
-
+            #print(f"start of block of {value} at {i}")
+            #print(f"Searching on from j")
             #iterate from this value onwards
             for j in range(i, end):
-
+                #print(f"{i} - {j}")
                 #if value is not equal to search value
                 if datalist[j][1] != value:
-
                     #end of block = j
                     val_end = j
-
+                    #print(f"End of block found at j = {j}")
                     #duration of value = time at val_end - time at val_start
-
-                    '''               
                     #if number of opposite value readings is less than 2, discount as noise
-                    if j-i < 2:
-                        continue'''
-
+                    '''if j-i < 2:
+                        print(f"j-i = {j-i}, probably noise, continuing")
+                        continue
+                    '''
                     #if duration is above 5ms, return val_start and val_end positions
                     if datalist[j][0] - datalist[i][0] > duration:
+                        #print("Duration large enough, returning")
                         return([val_start, val_end])
                     else:
-                        print(f"Breaking - duration measured at - {datalist[j][0] - datalist[i][0]}, measuring from {i} to {j}")
+                        #print(f"Breaking - duration measured at - {datalist[j][0] - datalist[i][0]}, measuring from {i} to {j}, probably noise")
                         break
-
-                if j == end and
+                if j == end-1 and datalist[j][1] == value:
+                    #print(f"Hit end, {j} == {datalist[j][1]} and {end} and {value}")
+                    return None
         else:
             continue
 
@@ -139,11 +140,11 @@ if __name__ == "__main__":
     zeroes = []
 
     while True:
-
+        print("Starting search")
         zeroblock = []
         #find start of datablock (i.e. end of block of zeroes)
         zeroblock = findduration(datalist, start, end, 0, 0.005)
-        print(f"Pause = {zeroblock}")
+        print(f"Pause found - {zeroblock}")
         print(f"Pause duration {datalist[zeroblock[1]][0] - datalist[zeroblock[0]][0]}")
         oneblockstart = zeroblock[1]
         #find end of datablock (i.e. start of next block of zeroes)
@@ -171,6 +172,7 @@ if __name__ == "__main__":
 
         start = oneblockend
 
+    print(f"Binary translations - {binary_codes}")
     print("\nRemoving ones outliers")
     ones = deleteoutlier(ones)
     print("Removing zeroes outliers")
