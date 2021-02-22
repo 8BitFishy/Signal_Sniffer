@@ -30,7 +30,6 @@ def binary_translator(datalist, start, end):
     av_bit_length = sum(bit_lengths) / len(bit_lengths)
 
 
-    print(f"AAVERAGE BIT LENGTH - {av_bit_length} based on {len(bit_lengths)} bits")
 
     #run until broken
     while True:

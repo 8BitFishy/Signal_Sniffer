@@ -16,26 +16,21 @@ def Signal_Interpreter(datalist):
     bits = []
 
     while True:
-        #print("Starting search")
         zeroblock = []
-        #find start of datablock (i.e. end of block of zeroes)
+        #find start of datablock (i.e. end of block of zeroes that lasts longer than 0.005s)
         zeroblock = Data_Analyst.findduration(datalist, start, end, 0, 0.005)
-        #print(f"Pause found - {zeroblock}")
-        #print(f"Pause duration {datalist[zeroblock[1]][0] - datalist[zeroblock[0]][0]}")
+        #end of this zero block represents the start of block of ones
         oneblockstart = zeroblock[1]
         #find end of datablock (i.e. start of next block of zeroes)
-        #print("Starting nextzeroblock")
         nextzeroblock = Data_Analyst.findduration(datalist, oneblockstart, len(datalist), 0, 0.005)
-        #print(f"Next Pause found at {nextzeroblock}")
+        #if no data returns, end of sample has been reached
         if nextzeroblock == None:
-            #print("Next pause returns none")
             break
 
         else:
             oneblockend = nextzeroblock[0]
             #convert block into binary
             if oneblockend - oneblockstart > 20:
-                #print(f"Data block = [{oneblockstart}, {oneblockend}]")
                 binary_data = Binary_Translator.binary_translator(datalist, oneblockstart, oneblockend)
                 if binary_data != None:
                     binary_codes.append(binary_data[0])
@@ -50,24 +45,18 @@ def Signal_Interpreter(datalist):
         start = oneblockend
 
     print(f"{len(binary_codes)} binary translations found:\n{binary_codes}")
-    #print("\nRemoving ones outliers")
-    '''
-    ones = Data_Analyst.deleteoutlier(ones)
-    #print("Removing zeroes outliers")
-    zeroes = Data_Analyst.deleteoutlier(zeroes)
-    bits = Data_Analyst.deleteoutlier(bits)
-    '''
-    #print("Removing pauses outliers")
     del pauses[0]
     del pauses[-1]
     pauses = Data_Analyst.deleteoutlier((pauses))
 
     guess = Data_Analyst.findmostcommon(binary_codes)
-    print(f"Binary data = {binary_data}")
-    for i in range(len(binary_data)-1, -1, -1):
-        if binary_data[0] != guess:
-            del binary_data[i]
-    print(f"New binary data = {binary_data}")
+
+    for i in range(len(binary_codes)-1, -1, -1):
+        if binary_codes[i] != guess[0]:
+            del binary_codes[i]
+            del ones[i]
+            del zeroes[i]
+            del bits[i]
 
     signal_pause_length = sum(pauses)/len(pauses)
     one_length = sum(ones)/len(ones)
