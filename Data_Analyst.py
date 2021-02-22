@@ -1,3 +1,6 @@
+from math import log10, floor
+
+
 def findduration(datalist, start, end, value, duration):
     #print(f"Starting duration search for {value} from {start} to {end}")
     #iterate through datalist from start point to end of list
@@ -37,16 +40,23 @@ def findduration(datalist, start, end, value, duration):
         else:
             continue
 
-def deleteoutlier(dataset):
+def roundtosigfig(x):
+    return round(x, -int(floor(log10(abs(x)))))
 
-    average = sum(dataset) / len(dataset)
-    #print(f"Average of dataset - {average}")
+def deleteoutlier(dataset):
+    rounded_data = []
+    
+    for i in range(len(dataset)):
+        rounded_data.append(roundtosigfig(dataset[i]))
+        
+    mode = findmostcommon(rounded_data)[0]
+
     newdataset = []
     for i in range(len(dataset)):
-        if abs((average - dataset[i]) / average) * 100 <= 50:
+        if abs((mode - dataset[i]) / mode) * 100 <= 50:
             newdataset.append(dataset[i])
-        #else:
-            #print(f"Outlier found - {i} - {dataset[i]}")
+        '''else:
+            print(f"Outlier found - {i} - {dataset[i]}")'''
     return newdataset
 
 

@@ -20,12 +20,12 @@ def Play_Direct(filename):
     print("done")
     return
 
-def Load_Codes():
+def Load_Codes(code):
     binary_code = []
-    code = input("Enter Code: ")
+    #code = input("Enter Code: ")
     code = str(code)
     filename = f"Binary_Data.txt"
-    with open(f"{code}_{filename}") as f:
+    with open(f"Plugs-White/{code}_{filename}") as f:
         for i in range(5):
             line = next(f).strip()
             data, value = line.rsplit(" - ")
@@ -38,7 +38,7 @@ def Load_Codes():
 
     return binary_code
 
-NUM_ATTEMPTS = 10
+NUM_ATTEMPTS = 20
 TRANSMIT_PIN = 24
 
 def transmit_code(binary_code):
@@ -66,7 +66,15 @@ def transmit_code(binary_code):
 
 if __name__ == '__main__':
     #Play_Direct("waveform.txt")
-    transmit_code(Load_Codes())
+    for i in range(1, 6):
+        for j in range(2):
+            if j == 0:
+                command = 'On'
+            else:
+                command = 'Off'
+     
+            print(f"{i}_{command}")
+            transmit_code(Load_Codes(f"{str(i)}_{command}"))
     '''
     for argument in sys.argv[1:]:
         exec('transmit_code(' + str(argument) + ')')

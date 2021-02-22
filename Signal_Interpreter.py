@@ -2,7 +2,6 @@ import File_Handler
 import Data_Analyst
 import Binary_Translator
 
-#git probe
 
 
 def Signal_Interpreter(datalist):
@@ -50,9 +49,7 @@ def Signal_Interpreter(datalist):
     if len(binary_codes)==0:
         return
     
-    
     pauses = Data_Analyst.deleteoutlier((pauses))
-
     guess = Data_Analyst.findmostcommon(binary_codes)
 
     for i in range(len(binary_codes)-1, -1, -1):
