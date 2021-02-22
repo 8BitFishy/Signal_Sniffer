@@ -59,7 +59,7 @@ def binary_translator(datalist, start, end):
             break
 
     #if length of zero length list is not 0, data is present
-    if len(av_zero_length_list) != 0:
+    if len(av_zero_length_list) != 0 and len(av_one_length_list) != 0:
 
         av_one_length = sum(av_one_length_list) / len(av_one_length_list)
         av_zero_length = sum(av_zero_length_list) / len(av_zero_length_list)

@@ -49,8 +49,7 @@ def Signal_Interpreter(datalist):
     if len(binary_codes)==0:
         return
     
-    del pauses[0]
-    del pauses[-1]
+    
     pauses = Data_Analyst.deleteoutlier((pauses))
 
     guess = Data_Analyst.findmostcommon(binary_codes)
