@@ -1,6 +1,6 @@
 import time
 import sys
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 def Play_Direct(filename):
@@ -20,19 +20,15 @@ def Play_Direct(filename):
     print("done")
     return
 
-def Load_Codes():
+def Load_Codes(filename):
     binary_code = []
-    code = input("Enter Code: ")
-    code = str(code)
-    filename = f"Binary_Data.txt"
-    with open(f"{code}_{filename}") as f:
-        for i in range(5):
+    with open(filename) as f:
+        for i in range(4):
             line = next(f).strip()
-            data, value = line.rsplit(" - ")
             if i == 0:
-                binary_code.append(int(value))
+                binary_code.append(int(line))
             else:
-                binary_code.append(float(value))
+                binary_code.append(float(line))
 
     print(binary_code)
 
@@ -40,33 +36,32 @@ def Load_Codes():
 
 NUM_ATTEMPTS = 10
 TRANSMIT_PIN = 24
-
+'''
 def transmit_code(binary_code):
     #Transmit a chosen code string using the GPIO transmitter
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(TRANSMIT_PIN, GPIO.OUT)
-    code = str(binary_code[0])
     for t in range(NUM_ATTEMPTS):
         for i in code:
             if i == '1':
                 GPIO.output(TRANSMIT_PIN, 1)
-                time.sleep(binary_code[2])
+                time.sleep(short_delay)
                 GPIO.output(TRANSMIT_PIN, 0)
-                time.sleep(binary_code[4] - binary_code[2])
+                time.sleep(long_delay)
             elif i == '0':
                 GPIO.output(TRANSMIT_PIN, 1)
-                time.sleep(binary_code[3])
+                time.sleep(long_delay)
                 GPIO.output(TRANSMIT_PIN, 0)
-                time.sleep(binary_code[3] - binary_code[2])
+                time.sleep(short_delay)
             else:
                 continue
         GPIO.output(TRANSMIT_PIN, 0)
-        time.sleep(binary_code[1])
+        time.sleep(extended_delay)
     GPIO.cleanup()
-
+'''
 if __name__ == '__main__':
-    #Play_Direct("waveform.txt")
-    transmit_code(Load_Codes())
+    Play_Direct("waveform.txt")
+    #Load_Codes('Binary_Data.txt')
     '''
     for argument in sys.argv[1:]:
         exec('transmit_code(' + str(argument) + ')')

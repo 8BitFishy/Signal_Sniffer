@@ -64,13 +64,6 @@ if __name__ == '__main__':
     #receive signal and process
     RECEIVED_SIGNAL = receive_signal()
  
-    print("Writing files...")
-    with open('waveform.txt', 'w') as f:
-        for i in range(len(RECEIVED_SIGNAL[0])):
-            f.write(str(f"{RECEIVED_SIGNAL[0][i]}, {RECEIVED_SIGNAL[1][i]}\n"))
-    f.close()
-    print("File Saved...")
-    
     #convert received signal to dataset
     datalist = []
     for i in range(len(RECEIVED_SIGNAL[0])):
@@ -81,7 +74,14 @@ if __name__ == '__main__':
     print("Interpreting data...")
     Signal_Interpreter.Signal_Interpreter(datalist)
 
+    print("Writing files...")
 
+    with open('waveform.csv', 'w') as f:
+        for i in range(len(RECEIVED_SIGNAL[0])):
+            f.write(str(f"{RECEIVED_SIGNAL[0][i]}, {RECEIVED_SIGNAL[1][i]}\n"))
+
+    f.close()
+    print("File Saved...")
 
     print("Plotting...")
     pyplot.plot(RECEIVED_SIGNAL[0], RECEIVED_SIGNAL[1])
