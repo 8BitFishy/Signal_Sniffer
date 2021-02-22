@@ -75,11 +75,9 @@ if __name__ == '__main__':
     Signal_Interpreter.Signal_Interpreter(datalist)
 
     print("Writing files...")
-
     with open('waveform.csv', 'w') as f:
         for i in range(len(RECEIVED_SIGNAL[0])):
             f.write(str(f"{RECEIVED_SIGNAL[0][i]}, {RECEIVED_SIGNAL[1][i]}\n"))
-
     f.close()
     print("File Saved...")
 

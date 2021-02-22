@@ -29,6 +29,7 @@ def Signal_Interpreter(datalist):
 
         else:
             oneblockend = nextzeroblock[0]
+            print(f"one block - {oneblockstart} - {oneblockend}")
             #convert block into binary
             if oneblockend - oneblockstart > 20:
                 binary_data = Binary_Translator.binary_translator(datalist, oneblockstart, oneblockend)
@@ -39,12 +40,15 @@ def Signal_Interpreter(datalist):
                     zeroes.append(binary_data[2])
                     bits.append(binary_data[3])
 
-            #else:
-                #print(f"Probably noise at {oneblockstart} - {oneblockend}")
+            else:
+                print(f"Probably noise at {oneblockstart} - {oneblockend}")
 
         start = oneblockend
 
     print(f"{len(binary_codes)} binary translations found:\n{binary_codes}")
+    if len(binary_codes) == 0:
+        return
+
     del pauses[0]
     del pauses[-1]
     pauses = Data_Analyst.deleteoutlier((pauses))
@@ -74,6 +78,7 @@ if __name__ == "__main__":
     datalist = []
     # generate datalist
     datalist = File_Handler.generate_datalist(datalist)
+
     Signal_Interpreter(datalist)
 
 
