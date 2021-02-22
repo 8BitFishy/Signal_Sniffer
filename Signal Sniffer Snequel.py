@@ -1,49 +1,7 @@
 from datetime import datetime
+import Signal_Interpreter
 import RPi.GPIO as GPIO
 import matplotlib.pyplot as pyplot
-
-def findduration(datalist, start, end, value, duration):
-    highest_duration = 0.0
-    #iterate through datalist from start point to end of list
-    for i in range(start, end):
-
-        #if data value is equal to search value
-        if datalist[i][1] == value:
-            #start = i
-            val_start = i
-
-            #iterate from this value onwards
-            for j in range(i, end):
-
-                #if value is not equal to search value
-                if datalist[j][1] != value:
-                    #end of val = j
-                    val_end = j
-                    #duration of value = time at val_end - time at val_start
-                    #if duration is above 5ms, return val_start and val_end positions
-                    if datalist[j][0] - datalist[i][0] > duration:
-                        return([val_start, val_end])
-                    else:
-                        break
-        else:
-            continue
-
-
-def binary_translator(datalist, start, end):
-    binary_signal = ''
-    while True:
-        onerange = findduration(datalist, start, end+1, 1, 0.00001)
-        if onerange != None:
-            if datalist[onerange[1]][0] - datalist[onerange[0]][0] < 0.0003:
-                binary_signal = binary_signal + str(1)
-            else:
-                binary_signal = binary_signal + str(0)
-            start = onerange[1]
-        else:
-            break
-
-    print(binary_signal)
-    return binary_signal
 
 
 def receive_signal():
@@ -97,7 +55,6 @@ def receive_signal():
         
     return RECEIVED_SIGNAL
 
-
 RECEIVED_SIGNAL = [[], []]  #[[time of reading], [signal reading]]
 MAX_DURATION = 6
 RECEIVE_PIN = 23
@@ -112,44 +69,22 @@ if __name__ == '__main__':
     for i in range(len(RECEIVED_SIGNAL[0])):
         data = [RECEIVED_SIGNAL[0][i], RECEIVED_SIGNAL[1][i]]
         datalist.append(data)
-        
-    print(f"Data length - {len(RECEIVED_SIGNAL[0])}")
-    
-    #find end of zero block
-    zeropause = []
-    zeropause = findduration(datalist, 0, len(datalist), 0, 0.005)
-    print(zeropause)
-    #if datablock found
-    if zeropause != None:
-        #identify start of datablock (i.e. end of zero block)
-        blockstart = zeropause[1]
-        #find end of datablock
-        zeropause = findduration(datalist, blockstart, len(datalist), 0, 0.005)
-        blockend = zeropause[0]
-        print(f"Block start at {blockstart}, block end at {blockend}")
-        #translate datablock into binary
-        binary_signal = binary_translator(datalist, blockstart, blockend)
-        
-        with open('Binary_Code.txt', 'a') as f:
-            f.write(binary_signal)
-            f.write("/n")
-        f.close()
-        
-    
+
+    #Interpret Signal
+    print("Interpreting data...")
+    Signal_Interpreter.Signal_Interpreter(datalist)
+
     print("Writing files...")
 
     with open('waveform.csv', 'w') as f:
         for i in range(len(RECEIVED_SIGNAL[0])):
             f.write(str(f"{RECEIVED_SIGNAL[0][i]}, {RECEIVED_SIGNAL[1][i]}\n"))
-        
+
     f.close()
-    
- 
-    
     print("File Saved...")
+
     print("Plotting...")
     pyplot.plot(RECEIVED_SIGNAL[0], RECEIVED_SIGNAL[1])
     pyplot.axis([4, 5, -1, 2])
     pyplot.show()
     print("Complete")
-    
