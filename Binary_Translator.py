@@ -23,7 +23,11 @@ def binary_translator(datalist, start, end):
         #otherwise break, as no data indicates end of datablock
         else:
             break
+    
+    if len(bit_length_start) <= 1:
+        return
 
+          
     #iterate through bit_length_start list and add the lengths of each bit to the bit_length variable
     for i in range(len(bit_length_start)-1):
         bit_lengths.append(bit_length_start[i+1] - bit_length_start[i])

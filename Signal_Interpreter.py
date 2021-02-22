@@ -45,6 +45,10 @@ def Signal_Interpreter(datalist):
         start = oneblockend
 
     print(f"{len(binary_codes)} binary translations found:\n{binary_codes}")
+    
+    if len(binary_codes)==0:
+        return
+    
     del pauses[0]
     del pauses[-1]
     pauses = Data_Analyst.deleteoutlier((pauses))
@@ -74,6 +78,7 @@ if __name__ == "__main__":
     datalist = []
     # generate datalist
     datalist = File_Handler.generate_datalist(datalist)
+
     Signal_Interpreter(datalist)
 
 
