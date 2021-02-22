@@ -38,7 +38,7 @@ def Load_Codes(code):
 
     return binary_code
 
-NUM_ATTEMPTS = 20
+NUM_ATTEMPTS = 30
 TRANSMIT_PIN = 24
 
 def transmit_code(binary_code):
@@ -74,6 +74,7 @@ if __name__ == '__main__':
                 command = 'Off'
      
             print(f"{i}_{command}")
+            time.sleep(.2)
             transmit_code(Load_Codes(f"{str(i)}_{command}"))
     '''
     for argument in sys.argv[1:]:
